@@ -2,15 +2,37 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import PromptScreen from "./screens/prompt/PromptScreen";
 import GalleryScreen from "./screens/gallery/GalleryScreen";
+import RevealScreen from "./screens/reveal/RevealScreen";
 
-type BottomTabParamList = {
-  Prompt: undefined;
-  Gallery: undefined;
+import type {
+  BottomTabParamList,
+  GalleryStackParamList,
+  PromptStackParamList,
+} from "./types";
+
+const PromptStack = createNativeStackNavigator<PromptStackParamList>();
+const PromptStackScreen = () => {
+  return (
+    <PromptStack.Navigator screenOptions={{ headerShown: false }}>
+      <PromptStack.Screen name="Reveal" component={RevealScreen} />
+      <PromptStack.Screen name="Prompt" component={PromptScreen} />
+    </PromptStack.Navigator>
+  );
+};
+
+const GalleryStack = createNativeStackNavigator<GalleryStackParamList>();
+const GalleryStackScreen = () => {
+  return (
+    <GalleryStack.Navigator>
+      <GalleryStack.Screen name="Gallery" component={GalleryScreen} />
+    </GalleryStack.Navigator>
+  );
 };
 
 export default function App() {
@@ -21,9 +43,10 @@ export default function App() {
       <NavigationContainer>
         <Tab.Navigator>
           <Tab.Screen
-            name="Prompt"
-            component={PromptScreen}
+            name="PromptStack"
+            component={PromptStackScreen}
             options={{
+              title: "Prompt",
               tabBarIcon: ({ focused, color }) =>
                 focused ? (
                   <MaterialCommunityIcons
@@ -41,9 +64,10 @@ export default function App() {
             }}
           />
           <Tab.Screen
-            name="Gallery"
-            component={GalleryScreen}
+            name="GalleryStack"
+            component={GalleryStackScreen}
             options={{
+              title: "Gallery",
               tabBarIcon: ({ focused, color }) =>
                 focused ? (
                   <MaterialCommunityIcons
