@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import GalleryScreen from "@/screens/galleryTab/GalleryScreen";
+import GalleryScreen from "@/screens/GalleryScreen";
 
 import type { GalleryTabStackParamList } from "@/types";
 
