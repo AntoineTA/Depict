@@ -1,7 +1,6 @@
 import { Button, StyleSheet, Text, View } from "react-native";
-import type { GalleryScreenProps } from "@/types";
 
-const GalleryScreen = ({ navigation }: GalleryScreenProps) => {
+const GalleryScreen = () => {
   return (
     <View style={styles.container}>
       <Text>GalleryScreen</Text>

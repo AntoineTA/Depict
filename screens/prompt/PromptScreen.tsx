@@ -1,7 +1,6 @@
 import { Button, StyleSheet, Text, View } from "react-native";
-import type { PromptScreenProps } from "@/types";
 
-const PromptScreen = ({ navigation }: PromptScreenProps) => {
+const PromptScreen = () => {
   return (
     <View style={styles.container}>
       <Text>PromptScreen</Text>

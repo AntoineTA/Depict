@@ -8,7 +8,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PromptScreen from "./screens/prompt/PromptScreen";
 import GalleryScreen from "./screens/gallery/GalleryScreen";
 
-import type { BottomTabParamList } from "./types";
+type BottomTabParamList = {
+  Prompt: undefined;
+  Gallery: undefined;
+};
 
 export default function App() {
   const Tab = createMaterialBottomTabNavigator<BottomTabParamList>();
