@@ -31,36 +31,35 @@ const PromptDisplay = () => {
     }
   }, [isRevealed]);
 
+  // fetching the revealed status from storage
   if (isRevealed === undefined) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (!isRevealed) {
     return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
+      <Button
+        title="Reveal"
+        onPress={() => {
+          setIsRevealed(true);
+        }}
+      />
     );
   }
 
-  return (
-    <View>
-      <Text>PromptScreen</Text>
-      {!isRevealed && (
+  if (isRevealed) {
+    return (
+      <>
+        <Text>Revealed!</Text>
         <Button
-          title="Reveal"
+          title="Reset"
           onPress={() => {
-            setIsRevealed(true);
+            setIsRevealed(undefined);
+            AsyncStorage.removeItem("isRevealed");
           }}
         />
-      )}
-      {isRevealed && <Text>Revealed!</Text>}
-
-      {/* Dev only */}
-      <Button
-        title="Reset"
-        onPress={() => {
-          setIsRevealed(undefined);
-          AsyncStorage.removeItem("isRevealed");
-        }}
-      />
-    </View>
-  );
+      </>
+    );
+  }
 };
 export default PromptDisplay;

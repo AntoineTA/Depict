@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import PromptDisplay from "./PromptDisplay";
 
 const PromptScreen = () => {
   return (
     <View style={styles.container}>
       <Text>PromptScreen</Text>
+      <PromptDisplay />
     </View>
   );
 };
