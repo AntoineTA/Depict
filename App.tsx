@@ -1,14 +1,65 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { PaperProvider } from "react-native-paper";
+import { NavigationContainer } from "@react-navigation/native";
+import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
+import PromptScreen from "./screens/prompt/PromptScreen";
+import GalleryScreen from "./screens/gallery/GalleryScreen";
+
+import type { BottomTabParamList } from "./types";
 
 export default function App() {
+  const Tab = createMaterialBottomTabNavigator<BottomTabParamList>();
+
   return (
     <PaperProvider>
-      <View style={styles.container}>
-        <Text>Open up App.tsx to start working on your app!</Text>
+      <NavigationContainer>
+        <Tab.Navigator>
+          <Tab.Screen
+            name="Prompt"
+            component={PromptScreen}
+            options={{
+              tabBarIcon: ({ focused, color }) =>
+                focused ? (
+                  <MaterialCommunityIcons
+                    name="camera"
+                    color={color}
+                    size={26}
+                  />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="camera-outline"
+                    color={color}
+                    size={26}
+                  />
+                ),
+            }}
+          />
+          <Tab.Screen
+            name="Gallery"
+            component={GalleryScreen}
+            options={{
+              tabBarIcon: ({ focused, color }) =>
+                focused ? (
+                  <MaterialCommunityIcons
+                    name="image-multiple"
+                    color={color}
+                    size={26}
+                  />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="image-multiple-outline"
+                    color={color}
+                    size={26}
+                  />
+                ),
+            }}
+          />
+        </Tab.Navigator>
         <StatusBar style="auto" />
-      </View>
+      </NavigationContainer>
     </PaperProvider>
   );
 }
