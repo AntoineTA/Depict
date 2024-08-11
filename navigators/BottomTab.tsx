@@ -1,7 +1,7 @@
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import PromptTabStack from "./PromptTabStack";
+import PromptScreen from "@/screens/prompt/screen";
 import GalleryTabStack from "./GalleryTabStack";
 
 import type { BottomTabParamList } from "@/types";
@@ -12,8 +12,8 @@ const BottomTab = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="PromptTabStack"
-        component={PromptTabStack}
+        name="Prompt"
+        component={PromptScreen}
         options={{
           title: "Prompt",
           tabBarIcon: ({ focused, color }) =>

@@ -1,18 +1,15 @@
+import { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
-import type { RevealScreenProps } from "@/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const RevealScreen = ({ navigation }: RevealScreenProps) => {
+const PromptScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>RevealScreen</Text>
-      <Button
-        title="Go to Prompt"
-        onPress={() => navigation.navigate("Prompt")}
-      />
+      <Text>PromptScreen</Text>
     </View>
   );
 };
-export default RevealScreen;
+export default PromptScreen;
 
 const styles = StyleSheet.create({
   container: {

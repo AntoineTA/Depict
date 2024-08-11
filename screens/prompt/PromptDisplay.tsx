@@ -1,8 +1,8 @@
+import { Button, Text, View } from "react-native";
 import { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const PromptScreen = () => {
+const PromptDisplay = () => {
   const [isRevealed, setIsRevealed] = useState<boolean | undefined>(undefined);
 
   //fetch the revealed status from async storage on component mount
@@ -33,14 +33,14 @@ const PromptScreen = () => {
 
   if (isRevealed === undefined) {
     return (
-      <View style={styles.container}>
+      <View>
         <Text>Loading...</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View>
       <Text>PromptScreen</Text>
       {!isRevealed && (
         <Button
@@ -63,13 +63,4 @@ const PromptScreen = () => {
     </View>
   );
 };
-export default PromptScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default PromptDisplay;
