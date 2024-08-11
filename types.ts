@@ -1,20 +1,20 @@
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export type BottomTabParamList = {
-  PromptStack: undefined;
-  GalleryStack: undefined;
+  PromptTabStack: undefined;
+  GalleryTabStack: undefined;
 };
 
-export type PromptStackParamList = {
+export type PromptTabStackParamList = {
   Reveal: undefined;
   Prompt: undefined;
 };
 
-export type GalleryStackParamList = {
+export type GalleryTabStackParamList = {
   Gallery: undefined;
 };
 
 export type RevealScreenProps = NativeStackScreenProps<
-  PromptStackParamList,
+  PromptTabStackParamList,
   "Reveal"
 >;
