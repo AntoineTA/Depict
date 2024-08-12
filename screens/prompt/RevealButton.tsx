@@ -1,0 +1,47 @@
+import { Dimensions } from "react-native";
+import { useTheme } from "react-native-paper";
+import { SwipeButton } from "@arelstone/react-native-swipe-button";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
+type RevealButtonProps = {
+  setIsRevealed: (isRevealed: boolean) => void;
+};
+
+const RevealButton = ({ setIsRevealed }: RevealButtonProps) => {
+  const colors = useTheme().colors;
+  const fonts = useTheme().fonts;
+
+  return (
+    <SwipeButton
+      title="Swipe to reveal"
+      Icon={
+        <MaterialCommunityIcons
+          name="chevron-double-right"
+          size={32}
+          color={colors.onPrimary}
+        />
+      }
+      onComplete={() => {
+        setIsRevealed(true);
+      }}
+      width={Dimensions.get("window").width * 0.75}
+      circleBackgroundColor={colors.primary}
+      underlayStyle={{
+        borderTopLeftRadius: 35,
+        borderBottomLeftRadius: 35,
+        backgroundColor: colors.primaryContainer,
+        marginLeft: 1,
+      }}
+      containerStyle={{
+        backgroundColor: colors.surfaceVariant,
+      }}
+      titleContainerStyle={{ marginLeft: "10%" }}
+      titleStyle={{
+        color: colors.onSurfaceVariant,
+        ...fonts.labelLarge,
+        fontSize: 18,
+      }}
+    />
+  );
+};
+export default RevealButton;

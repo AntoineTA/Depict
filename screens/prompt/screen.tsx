@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Dimensions, StyleSheet, View } from "react-native";
 import { Text, ActivityIndicator } from "react-native-paper";
+
 import Animated, {
   BounceInLeft,
   BounceInRight,
   FadeOutDown,
 } from "react-native-reanimated";
+import RevealButton from "./RevealButton";
 
 const PromptScreen = () => {
   const [isRevealed, setIsRevealed] = useState<boolean | undefined>(undefined);
+  const duration = 800;
 
   //fetch the revealed status from async storage on component mount
   useEffect(() => {
@@ -36,8 +39,6 @@ const PromptScreen = () => {
       })();
     }
   }, [isRevealed]);
-
-  const duration = 800;
 
   return (
     <View style={styles.container}>
@@ -71,15 +72,10 @@ const PromptScreen = () => {
         )}
       </View>
 
-      <View style={styles.revealButton}>
+      <View>
         {isRevealed === false && (
           <Animated.View exiting={FadeOutDown}>
-            <Button
-              title="Reveal"
-              onPress={() => {
-                setIsRevealed(true);
-              }}
-            />
+            <RevealButton setIsRevealed={setIsRevealed} />
           </Animated.View>
         )}
       </View>
@@ -109,9 +105,5 @@ const styles = StyleSheet.create({
     height: "75%",
     justifyContent: "center",
     backgroundColor: "violet",
-  },
-  revealButton: {
-    height: 50,
-    backgroundColor: "lightblue",
   },
 });

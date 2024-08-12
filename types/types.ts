@@ -14,8 +14,3 @@ export type GalleryScreenProps = NativeStackScreenProps<
   GalleryTabStackParamList,
   "Gallery"
 >;
-
-// export type RevealScreenProps = NativeStackScreenProps<
-//   PromptTabStackParamList,
-//   "Reveal"
-// >;

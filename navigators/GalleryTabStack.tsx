@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GalleryScreen from "@/screens/gallery/screen";
 import ImageScreen from "@/screens/image/screen";
 
-import type { GalleryTabStackParamList } from "@/types";
+import type { GalleryTabStackParamList } from "@/types/types";
 
 const GalleryTabStack = () => {
   const Stack = createNativeStackNavigator<GalleryTabStackParamList>();
