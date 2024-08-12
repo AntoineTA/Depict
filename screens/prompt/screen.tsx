@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Button, Dimensions, StyleSheet, View } from "react-native";
+import { Button, Dimensions, Platform, StyleSheet, View } from "react-native";
 import { Text, ActivityIndicator } from "react-native-paper";
 
 import Animated, {
@@ -12,6 +12,7 @@ import RevealButton from "./RevealButton";
 
 const PromptScreen = () => {
   const [isRevealed, setIsRevealed] = useState<boolean | undefined>(undefined);
+
   const duration = 800;
 
   //fetch the revealed status from async storage on component mount
@@ -52,7 +53,12 @@ const PromptScreen = () => {
         {isRevealed === true && (
           <>
             <Animated.View entering={BounceInLeft.duration(duration)}>
-              <Text variant="displayLarge">Triumph</Text>
+              <Text
+                variant="displayLarge"
+                style={{ fontFamily: "Merriweather_900Black" }}
+              >
+                Triumph
+              </Text>
             </Animated.View>
 
             <Animated.View
