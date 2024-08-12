@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Button, Dimensions, Platform, StyleSheet, View } from "react-native";
+import { Button, Dimensions, StyleSheet, View } from "react-native";
 import { Text, ActivityIndicator } from "react-native-paper";
 
 import Animated, {
@@ -8,7 +8,9 @@ import Animated, {
   BounceInRight,
   FadeOutDown,
 } from "react-native-reanimated";
+
 import RevealButton from "./RevealButton";
+import PromptDisplay from "./PromptDisplay";
 
 const PromptScreen = () => {
   const [isRevealed, setIsRevealed] = useState<boolean | undefined>(undefined);
@@ -53,12 +55,7 @@ const PromptScreen = () => {
         {isRevealed === true && (
           <>
             <Animated.View entering={BounceInLeft.duration(duration)}>
-              <Text
-                variant="displayLarge"
-                style={{ fontFamily: "Merriweather_900Black" }}
-              >
-                Triumph
-              </Text>
+              <PromptDisplay />
             </Animated.View>
 
             <Animated.View

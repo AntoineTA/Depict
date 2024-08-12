@@ -1,65 +1,25 @@
-import { Button, Text, View } from "react-native";
-import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Text } from "react-native-paper";
+import { prompts } from "@/constants/prompts";
 
 const PromptDisplay = () => {
-  const [isRevealed, setIsRevealed] = useState<boolean | undefined>(undefined);
+  // get the index of the prompt to display based on the current date
+  const startDate = new Date("2024-08-12");
+  const today = new Date();
+  const daysSinceStart = Math.floor(
+    (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+  );
+  const index = daysSinceStart % prompts.length;
 
-  //fetch the revealed status from async storage on component mount
-  useEffect(() => {
-    (async () => {
-      try {
-        const value = await AsyncStorage.getItem("isRevealed");
-        setIsRevealed(value === "true");
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-  }, []);
-
-  //save the revealed status to async storage whenver it changes
-  useEffect(() => {
-    if (isRevealed !== undefined) {
-      (async () => {
-        try {
-          const value = isRevealed ? "true" : "false"; //convert boolean to string
-          await AsyncStorage.setItem("isRevealed", value);
-        } catch (e) {
-          console.error(e);
-        }
-      })();
-    }
-  }, [isRevealed]);
-
-  // fetching the revealed status from storage
-  if (isRevealed === undefined) {
-    return <Text>Loading...</Text>;
-  }
-
-  if (!isRevealed) {
-    return (
-      <Button
-        title="Reveal"
-        onPress={() => {
-          setIsRevealed(true);
-        }}
-      />
-    );
-  }
-
-  if (isRevealed) {
-    return (
-      <>
-        <Text>Revealed!</Text>
-        <Button
-          title="Reset"
-          onPress={() => {
-            setIsRevealed(undefined);
-            AsyncStorage.removeItem("isRevealed");
-          }}
-        />
-      </>
-    );
-  }
+  return (
+    <Text
+      variant="displayLarge"
+      style={{
+        fontFamily: "Merriweather_900Black",
+        textTransform: "capitalize",
+      }}
+    >
+      {prompts[index]}
+    </Text>
+  );
 };
 export default PromptDisplay;
