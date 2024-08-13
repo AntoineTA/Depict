@@ -10,38 +10,49 @@ import Animated, {
 } from "react-native-reanimated";
 
 import RevealButton from "./RevealButton";
-import PromptDisplay from "./PromptDisplay";
+import { prompts } from "@/constants/prompts";
+
+const computePromptIndex = () => {
+  const startDate = new Date("2024-08-12");
+  const today = new Date();
+  const daysSinceStart = Math.floor(
+    (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+  );
+  return daysSinceStart % prompts.length;
+};
 
 const PromptScreen = () => {
   const [isRevealed, setIsRevealed] = useState<boolean | undefined>(undefined);
 
-  const duration = 800;
+  const changeRevealStatus = async (status: boolean) => {
+    setIsRevealed(status);
+    await AsyncStorage.setItem("isRevealed", status ? "true" : "false");
+  };
 
-  //fetch the revealed status from async storage on component mount
+  const promptIndex = computePromptIndex();
+  const animDuration = 800;
+
+  //On component mount
   useEffect(() => {
     (async () => {
       try {
-        const value = await AsyncStorage.getItem("isRevealed");
-        setIsRevealed(value === "true");
+        const storedIndex = await AsyncStorage.getItem("promptIndex");
+
+        // if prompt indexed has changed, reset isRevealed, update storage and render the component
+        if (storedIndex !== promptIndex.toString()) {
+          await changeRevealStatus(false);
+          await AsyncStorage.setItem("promptIndex", promptIndex.toString());
+          return;
+        }
+
+        // if prompt index is the same, load isRevealed from storage
+        const storedIsRevelead = await AsyncStorage.getItem("isRevealed");
+        setIsRevealed(storedIsRevelead === "true");
       } catch (e) {
         console.error(e);
       }
     })();
   }, []);
-
-  //save the revealed status to async storage whenver it changes
-  useEffect(() => {
-    if (isRevealed !== undefined) {
-      (async () => {
-        try {
-          const value = isRevealed ? "true" : "false"; //convert boolean to string
-          await AsyncStorage.setItem("isRevealed", value);
-        } catch (e) {
-          console.error(e);
-        }
-      })();
-    }
-  }, [isRevealed]);
 
   return (
     <View style={styles.container}>
@@ -54,23 +65,22 @@ const PromptScreen = () => {
 
         {isRevealed === true && (
           <>
-            <Animated.View entering={BounceInLeft.duration(duration)}>
-              <PromptDisplay />
+            <Animated.View entering={BounceInLeft.duration(animDuration)}>
+              <Text
+                variant="displayLarge"
+                style={{
+                  fontFamily: "Merriweather_900Black",
+                  textTransform: "capitalize",
+                }}
+              >
+                {prompts[promptIndex]}
+              </Text>
             </Animated.View>
 
             <Animated.View
               style={styles.box}
-              entering={BounceInRight.duration(duration)}
-            >
-              {/* DEV */}
-              <Button
-                title="Reset"
-                onPress={() => {
-                  setIsRevealed(false);
-                  // AsyncStorage.removeItem("isRevealed");
-                }}
-              />
-            </Animated.View>
+              entering={BounceInRight.duration(animDuration)}
+            ></Animated.View>
           </>
         )}
       </View>
@@ -78,7 +88,7 @@ const PromptScreen = () => {
       <View>
         {isRevealed === false && (
           <Animated.View exiting={FadeOutDown}>
-            <RevealButton setIsRevealed={setIsRevealed} />
+            <RevealButton changeRevealStatus={changeRevealStatus} />
           </Animated.View>
         )}
       </View>
@@ -95,13 +105,13 @@ const styles = StyleSheet.create({
   headline: {
     marginTop: Dimensions.get("window").height * 0.1,
     alignItems: "center",
-    backgroundColor: "lightgreen",
+    // backgroundColor: "lightgreen",
   },
   main: {
     height: Dimensions.get("window").height * 0.4,
     alignItems: "center",
     justifyContent: "space-around",
-    backgroundColor: "lightgrey",
+    // backgroundColor: "lightgrey",
   },
   box: {
     width: 200,

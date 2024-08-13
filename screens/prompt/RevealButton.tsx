@@ -4,10 +4,10 @@ import { SwipeButton } from "@arelstone/react-native-swipe-button";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 type RevealButtonProps = {
-  setIsRevealed: (isRevealed: boolean) => void;
+  changeRevealStatus: (status: boolean) => void;
 };
 
-const RevealButton = ({ setIsRevealed }: RevealButtonProps) => {
+const RevealButton = ({ changeRevealStatus }: RevealButtonProps) => {
   const colors = useTheme().colors;
   const fonts = useTheme().fonts;
 
@@ -22,7 +22,7 @@ const RevealButton = ({ setIsRevealed }: RevealButtonProps) => {
         />
       }
       onComplete={() => {
-        setIsRevealed(true);
+        changeRevealStatus(true);
       }}
       width={Dimensions.get("window").width * 0.75}
       circleBackgroundColor={colors.primary}
