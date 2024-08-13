@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Button, Dimensions, StyleSheet, View } from "react-native";
+import {
+  Button,
+  Dimensions,
+  StyleSheet,
+  View,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import { Text, ActivityIndicator } from "react-native-paper";
 
 import Animated, {
@@ -23,16 +30,41 @@ const computePromptIndex = () => {
 
 const PromptScreen = () => {
   const [isRevealed, setIsRevealed] = useState<boolean | undefined>(undefined);
+  const [promptIndex, setPromptIndex] = useState<number>(computePromptIndex());
+  const [refreshing, setRefreshing] = useState(false);
 
-  const changeRevealStatus = async (status: boolean) => {
-    setIsRevealed(status);
-    await AsyncStorage.setItem("isRevealed", status ? "true" : "false");
+  const onRefresh = async () => {
+    if (!isRevealed) return;
+
+    const updatedIndex = computePromptIndex();
+    if (updatedIndex === promptIndex) return;
+
+    setRefreshing(true);
+    await changeRevealStatus(false);
+    await changePromptIndex(updatedIndex);
+    setRefreshing(false);
   };
 
-  const promptIndex = computePromptIndex();
+  const changeRevealStatus = async (status: boolean) => {
+    try {
+      setIsRevealed(status);
+      await AsyncStorage.setItem("isRevealed", status ? "true" : "false");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const changePromptIndex = async (index: number) => {
+    try {
+      setPromptIndex(index);
+      await AsyncStorage.setItem("promptIndex", index.toString());
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const animDuration = 800;
 
-  //On component mount
   useEffect(() => {
     (async () => {
       try {
@@ -55,7 +87,12 @@ const PromptScreen = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={styles.headline}>
         <Text variant="headlineSmall">Prompt of the day</Text>
       </View>
@@ -92,7 +129,7 @@ const PromptScreen = () => {
           </Animated.View>
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 export default PromptScreen;
