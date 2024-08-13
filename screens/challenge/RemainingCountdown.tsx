@@ -22,14 +22,18 @@ const RemainingCountdown = ({
 
   return (
     <CountdownCircleTimer
-      isPlaying
+      isPlaying={challenge.secondsLeft !== 0}
       duration={300}
       initialRemainingTime={challenge.secondsLeft}
-      colors={colors.primary as `rgba(${string})`}
+      colors={
+        challenge.secondsLeft === 0
+          ? (colors.surfaceDisabled as `rgba(${string})`)
+          : (colors.primary as `rgba(${string})`)
+      }
       size={100}
       strokeWidth={6}
       onComplete={() => {
-        updateChallenge({ ...challenge, secondsLeft: 0, isFinished: true });
+        updateChallenge({ ...challenge, secondsLeft: 0 });
       }}
       onUpdate={(remaining) => {
         if (remaining % 10 === 0 && remaining >= 10) {

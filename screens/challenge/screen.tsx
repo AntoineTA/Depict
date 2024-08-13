@@ -7,22 +7,22 @@ import {
   ScrollView,
   RefreshControl,
 } from "react-native";
-import { Text, ActivityIndicator, Button } from "react-native-paper";
+import { Text, ActivityIndicator } from "react-native-paper";
 import Animated, {
   BounceInLeft,
   BounceInRight,
   FadeOutDown,
 } from "react-native-reanimated";
 
+import { prompts } from "@/constants/prompts";
 import RevealButton from "./RevealButton";
 import RemainingCountdown from "./RemainingCountdown";
-import { prompts } from "@/constants/prompts";
+import CameraButton from "./CameraButton";
 
 export type Challenge = {
   promptIndex: number;
   isRevealed: boolean;
   secondsLeft: number;
-  isFinished: boolean;
   isCompleted: boolean;
 };
 
@@ -31,14 +31,13 @@ const ChallengeScreen = () => {
     promptIndex: 0,
     isRevealed: false,
     secondsLeft: 300,
-    isFinished: false,
     isCompleted: false,
   });
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const computePromptIndex = () => {
-    const startDate = new Date("2024-08-12");
+    const startDate = new Date("2024-08-06");
     const today = new Date();
     const daysSinceStart = Math.floor(
       (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
@@ -75,7 +74,6 @@ const ChallengeScreen = () => {
       promptIndex: currentIndex,
       isRevealed: false,
       secondsLeft: 300,
-      isFinished: false,
       isCompleted: false,
     });
     setRefreshing(false);
@@ -93,7 +91,6 @@ const ChallengeScreen = () => {
           promptIndex: currentIndex,
           isRevealed: false,
           secondsLeft: 300,
-          isFinished: false,
           isCompleted: false,
         });
         setIsLoading(false);
@@ -139,15 +136,8 @@ const ChallengeScreen = () => {
               style={styles.actions}
               entering={BounceInRight.duration(animDuration)}
             >
-              <RemainingCountdown {...{ challenge, updateChallenge }} />
-              <Button
-                icon="camera"
-                mode="contained"
-                onPress={() => console.log("Pressed")}
-                disabled={challenge.isFinished}
-              >
-                Take a photo
-              </Button>
+              {<RemainingCountdown {...{ challenge, updateChallenge }} />}
+              <CameraButton {...{ challenge, updateChallenge }} />
             </Animated.View>
           </>
         )}
@@ -159,15 +149,17 @@ const ChallengeScreen = () => {
             <RevealButton {...{ challenge, updateChallenge }} />
           </Animated.View>
         )}
-        {!isLoading && challenge.isFinished && !challenge.isCompleted && (
-          <View style={styles.bottomText}>
-            <Text variant="titleMedium">You ran out of time!</Text>
-            <Text variant="bodyLarge">
-              Come back tomorrow for a new challenge.
-            </Text>
-          </View>
-        )}
-        {!isLoading && challenge.isFinished && challenge.isCompleted && (
+        {!isLoading &&
+          challenge.secondsLeft === 0 &&
+          !challenge.isCompleted && (
+            <View style={styles.bottomText}>
+              <Text variant="titleMedium">You ran out of time!</Text>
+              <Text variant="bodyLarge">
+                Come back tomorrow for a new challenge.
+              </Text>
+            </View>
+          )}
+        {!isLoading && challenge.secondsLeft === 0 && challenge.isCompleted && (
           <View style={styles.bottomText}>
             <Text variant="titleMedium">Well done!</Text>
             <Text variant="bodyLarge">
