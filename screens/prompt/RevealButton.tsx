@@ -17,14 +17,15 @@ const RevealButton = ({ changeRevealStatus }: RevealButtonProps) => {
       Icon={
         <MaterialCommunityIcons
           name="chevron-double-right"
-          size={32}
+          size={24}
           color={colors.onPrimary}
         />
       }
       onComplete={() => {
         changeRevealStatus(true);
       }}
-      width={Dimensions.get("window").width * 0.75}
+      width={Dimensions.get("window").width * 0.7}
+      height={60}
       circleBackgroundColor={colors.primary}
       underlayStyle={{
         borderTopLeftRadius: 35,
@@ -39,7 +40,7 @@ const RevealButton = ({ changeRevealStatus }: RevealButtonProps) => {
       titleStyle={{
         color: colors.onSurfaceVariant,
         ...fonts.labelLarge,
-        fontSize: 18,
+        // fontSize: 18,
       }}
     />
   );

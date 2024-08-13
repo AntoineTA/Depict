@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
-  Button,
   Dimensions,
   StyleSheet,
   View,
   ScrollView,
   RefreshControl,
 } from "react-native";
-import { Text, ActivityIndicator } from "react-native-paper";
+import { Text, ActivityIndicator, Button } from "react-native-paper";
 
 import Animated, {
   BounceInLeft,
@@ -18,9 +17,10 @@ import Animated, {
 
 import RevealButton from "./RevealButton";
 import { prompts } from "@/constants/prompts";
+import RemainingCountdown from "./RemainingCountdown";
 
 const computePromptIndex = () => {
-  const startDate = new Date("2024-08-12");
+  const startDate = new Date("2024-08-11");
   const today = new Date();
   const daysSinceStart = Math.floor(
     (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
@@ -31,6 +31,7 @@ const computePromptIndex = () => {
 const PromptScreen = () => {
   const [isRevealed, setIsRevealed] = useState<boolean | undefined>(undefined);
   const [promptIndex, setPromptIndex] = useState<number>(computePromptIndex());
+  const [isCompleted, setIsCompleted] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
@@ -117,7 +118,17 @@ const PromptScreen = () => {
             <Animated.View
               style={styles.box}
               entering={BounceInRight.duration(animDuration)}
-            ></Animated.View>
+            >
+              <RemainingCountdown setIsCompleted={setIsCompleted} />
+              <Button
+                icon="camera"
+                mode="contained"
+                onPress={() => console.log("Pressed")}
+                disabled={isCompleted}
+              >
+                Take a photo
+              </Button>
+            </Animated.View>
           </>
         )}
       </View>
@@ -151,9 +162,11 @@ const styles = StyleSheet.create({
     // backgroundColor: "lightgrey",
   },
   box: {
-    width: 200,
+    marginTop: 60,
+    // width: 200,
     height: "75%",
-    justifyContent: "center",
-    backgroundColor: "violet",
+    justifyContent: "space-around",
+    alignItems: "center",
+    // backgroundColor: "violet",
   },
 });
