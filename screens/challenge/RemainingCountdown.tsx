@@ -1,10 +1,11 @@
 import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
-import { MD3LightTheme } from "react-native-paper";
+import type { Challenge } from "./screen";
 
 type RemainingCountdownProps = {
-  setIsCompleted: (status: boolean) => void;
+  challenge: Challenge;
+  updateChallenge: (challenge: Challenge) => void;
 };
 
 const formatTime = (seconds: number) => {
@@ -13,17 +14,28 @@ const formatTime = (seconds: number) => {
   return time.toISOString().substring(14, 19);
 };
 
-const RemainingCountdown = ({ setIsCompleted }: RemainingCountdownProps) => {
+const RemainingCountdown = ({
+  challenge,
+  updateChallenge,
+}: RemainingCountdownProps) => {
   const { colors } = useTheme();
 
   return (
     <CountdownCircleTimer
       isPlaying
       duration={300}
+      initialRemainingTime={challenge.secondsLeft}
       colors={colors.primary as `rgba(${string})`}
-      onComplete={() => setIsCompleted(true)}
       size={100}
       strokeWidth={6}
+      onComplete={() => {
+        updateChallenge({ ...challenge, secondsLeft: 0, isFinished: true });
+      }}
+      onUpdate={(remaining) => {
+        if (remaining % 10 === 0 && remaining >= 10) {
+          updateChallenge({ ...challenge, secondsLeft: remaining }); // Update remaining time every 10 seconds
+        }
+      }}
     >
       {({ remainingTime }) => (
         <View

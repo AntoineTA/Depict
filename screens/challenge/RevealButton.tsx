@@ -2,12 +2,14 @@ import { Dimensions } from "react-native";
 import { useTheme } from "react-native-paper";
 import { SwipeButton } from "@arelstone/react-native-swipe-button";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import type { Challenge } from "./screen";
 
 type RevealButtonProps = {
-  changeRevealStatus: (status: boolean) => void;
+  challenge: Challenge;
+  updateChallenge: (challenge: Challenge) => void;
 };
 
-const RevealButton = ({ changeRevealStatus }: RevealButtonProps) => {
+const RevealButton = ({ challenge, updateChallenge }: RevealButtonProps) => {
   const colors = useTheme().colors;
   const fonts = useTheme().fonts;
 
@@ -22,7 +24,7 @@ const RevealButton = ({ changeRevealStatus }: RevealButtonProps) => {
         />
       }
       onComplete={() => {
-        changeRevealStatus(true);
+        updateChallenge({ ...challenge, isRevealed: true });
       }}
       width={Dimensions.get("window").width * 0.7}
       height={60}

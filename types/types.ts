@@ -1,7 +1,7 @@
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export type BottomTabParamList = {
-  Prompt: undefined;
+  ChallengeScreen: undefined;
   GalleryTabStack: undefined;
 };
 

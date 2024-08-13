@@ -1,7 +1,7 @@
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import PromptScreen from "@/screens/prompt/screen";
+import ChallengeScreen from "@/screens/challenge/screen";
 import GalleryTabStack from "./GalleryTabStack";
 
 import type { BottomTabParamList } from "@/types/types";
@@ -12,10 +12,10 @@ const BottomTab = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Prompt"
-        component={PromptScreen}
+        name="ChallengeScreen"
+        component={ChallengeScreen}
         options={{
-          title: "Prompt",
+          title: "Challenge",
           tabBarIcon: ({ focused, color }) =>
             focused ? (
               <MaterialCommunityIcons name="camera" color={color} size={26} />
