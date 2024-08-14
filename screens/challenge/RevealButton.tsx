@@ -42,7 +42,6 @@ const RevealButton = ({ challenge, updateChallenge }: RevealButtonProps) => {
       titleStyle={{
         color: colors.onSurfaceVariant,
         ...fonts.labelLarge,
-        // fontSize: 18,
       }}
     />
   );

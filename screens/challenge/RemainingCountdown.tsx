@@ -6,6 +6,8 @@ import type { Challenge } from "./screen";
 type RemainingCountdownProps = {
   challenge: Challenge;
   updateChallenge: (challenge: Challenge) => void;
+  duration: number;
+  isCompleting: boolean;
 };
 
 const formatTime = (seconds: number) => {
@@ -17,28 +19,28 @@ const formatTime = (seconds: number) => {
 const RemainingCountdown = ({
   challenge,
   updateChallenge,
+  duration: challengeDuration,
+  isCompleting,
 }: RemainingCountdownProps) => {
   const { colors } = useTheme();
 
   return (
     <CountdownCircleTimer
-      isPlaying={challenge.secondsLeft !== 0}
-      duration={300}
+      isPlaying={!challenge.isFinished && !isCompleting}
+      duration={challengeDuration}
       initialRemainingTime={challenge.secondsLeft}
       colors={
-        challenge.secondsLeft === 0
+        challenge.isFinished
           ? (colors.surfaceDisabled as `rgba(${string})`)
           : (colors.primary as `rgba(${string})`)
       }
       size={100}
       strokeWidth={6}
       onComplete={() => {
-        updateChallenge({ ...challenge, secondsLeft: 0 });
+        updateChallenge({ ...challenge, isFinished: true, secondsLeft: 0 });
       }}
       onUpdate={(remaining) => {
-        if (remaining % 10 === 0 && remaining >= 10) {
-          updateChallenge({ ...challenge, secondsLeft: remaining }); // Update remaining time every 10 seconds
-        }
+        updateChallenge({ ...challenge, secondsLeft: remaining });
       }}
     >
       {({ remainingTime }) => (
@@ -52,7 +54,6 @@ const RemainingCountdown = ({
           <Text
             variant="labelLarge"
             style={{
-              // fontSize: 16,
               textAlign: "center",
               lineHeight: 22,
               color: colors.onBackground,

@@ -23,21 +23,25 @@ export type Challenge = {
   promptIndex: number;
   isRevealed: boolean;
   secondsLeft: number;
+  isFinished: boolean;
   isCompleted: boolean;
 };
 
 const ChallengeScreen = () => {
+  const challengeDuration = 15;
   const [challenge, setChallenge] = useState<Challenge>({
     promptIndex: 0,
     isRevealed: false,
-    secondsLeft: 300,
+    secondsLeft: challengeDuration,
+    isFinished: false,
     isCompleted: false,
   });
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [isCompleting, setIsCompleting] = useState(false); //track if the user is completing the challenge
 
   const computePromptIndex = () => {
-    const startDate = new Date("2024-08-06");
+    const startDate = new Date("2024-08-11");
     const today = new Date();
     const daysSinceStart = Math.floor(
       (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
@@ -73,7 +77,8 @@ const ChallengeScreen = () => {
     await updateChallenge({
       promptIndex: currentIndex,
       isRevealed: false,
-      secondsLeft: 300,
+      secondsLeft: challengeDuration,
+      isFinished: false,
       isCompleted: false,
     });
     setRefreshing(false);
@@ -90,7 +95,8 @@ const ChallengeScreen = () => {
         await updateChallenge({
           promptIndex: currentIndex,
           isRevealed: false,
-          secondsLeft: 300,
+          secondsLeft: challengeDuration,
+          isFinished: false,
           isCompleted: false,
         });
         setIsLoading(false);
@@ -136,8 +142,24 @@ const ChallengeScreen = () => {
               style={styles.actions}
               entering={BounceInRight.duration(animDuration)}
             >
-              {<RemainingCountdown {...{ challenge, updateChallenge }} />}
-              <CameraButton {...{ challenge, updateChallenge }} />
+              {
+                <RemainingCountdown
+                  {...{
+                    challenge,
+                    updateChallenge,
+                    duration: challengeDuration,
+                    isCompleting,
+                  }}
+                />
+              }
+              <CameraButton
+                {...{
+                  challenge,
+                  updateChallenge,
+                  isCompleting,
+                  setIsCompleting,
+                }}
+              />
             </Animated.View>
           </>
         )}
@@ -149,17 +171,15 @@ const ChallengeScreen = () => {
             <RevealButton {...{ challenge, updateChallenge }} />
           </Animated.View>
         )}
-        {!isLoading &&
-          challenge.secondsLeft === 0 &&
-          !challenge.isCompleted && (
-            <View style={styles.bottomText}>
-              <Text variant="titleMedium">You ran out of time!</Text>
-              <Text variant="bodyLarge">
-                Come back tomorrow for a new challenge.
-              </Text>
-            </View>
-          )}
-        {!isLoading && challenge.secondsLeft === 0 && challenge.isCompleted && (
+        {!isLoading && challenge.isFinished && !challenge.isCompleted && (
+          <View style={styles.bottomText}>
+            <Text variant="titleMedium">You ran out of time!</Text>
+            <Text variant="bodyLarge">
+              Come back tomorrow for a new challenge.
+            </Text>
+          </View>
+        )}
+        {!isLoading && challenge.isFinished && challenge.isCompleted && (
           <View style={styles.bottomText}>
             <Text variant="titleMedium">Well done!</Text>
             <Text variant="bodyLarge">
