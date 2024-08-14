@@ -1,7 +1,10 @@
 import { Dimensions } from "react-native";
+import * as Haptics from "expo-haptics";
+
 import { useTheme } from "react-native-paper";
 import { SwipeButton } from "@arelstone/react-native-swipe-button";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import type { Challenge } from "./screen";
 
 type RevealButtonProps = {
@@ -10,8 +13,7 @@ type RevealButtonProps = {
 };
 
 const RevealButton = ({ challenge, updateChallenge }: RevealButtonProps) => {
-  const colors = useTheme().colors;
-  const fonts = useTheme().fonts;
+  const { colors, fonts } = useTheme();
 
   return (
     <SwipeButton
@@ -24,6 +26,7 @@ const RevealButton = ({ challenge, updateChallenge }: RevealButtonProps) => {
         />
       }
       onComplete={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         updateChallenge({ ...challenge, isRevealed: true });
       }}
       width={Dimensions.get("window").width * 0.7}
