@@ -20,29 +20,34 @@ import RevealButton from "./RevealButton";
 import RemainingCountdown from "./RemainingCountdown";
 import CameraButton from "./CameraButton";
 
-export type Challenge = {
+export class Challenge {
   promptIndex: number;
+  date: Date;
+  duration: number;
   isRevealed: boolean;
   secondsLeft: number;
   isFinished: boolean;
   isCompleted: boolean;
-};
+
+  constructor(promptIndex: number) {
+    this.promptIndex = promptIndex;
+    this.date = new Date();
+    this.duration = 300;
+    this.isRevealed = false;
+    this.secondsLeft = this.duration;
+    this.isFinished = false;
+    this.isCompleted = false;
+  }
+}
 
 const ChallengeScreen = () => {
-  const challengeDuration = 300; //in seconds
-  const [challenge, setChallenge] = useState<Challenge>({
-    promptIndex: 0,
-    isRevealed: false,
-    secondsLeft: challengeDuration,
-    isFinished: false,
-    isCompleted: false,
-  });
+  const [challenge, setChallenge] = useState<Challenge>(new Challenge(0));
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [isCompleting, setIsCompleting] = useState(false); //track if the user is completing the challenge
 
   const computePromptIndex = () => {
-    const startDate = new Date("2024-08-11");
+    const startDate = new Date("2024-08-13");
     const today = new Date();
     const daysSinceStart = Math.floor(
       (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
@@ -50,10 +55,10 @@ const ChallengeScreen = () => {
     return daysSinceStart % prompts.length;
   };
 
-  const updateChallenge = async (newChallenge: Challenge) => {
+  const updateChallenge = async (updatedChallenge: Challenge) => {
     try {
-      setChallenge(newChallenge);
-      await AsyncStorage.setItem("challenge", JSON.stringify(newChallenge));
+      setChallenge(updatedChallenge);
+      await AsyncStorage.setItem("challenge", JSON.stringify(updatedChallenge));
     } catch (e) {
       console.error(e);
     }
@@ -75,13 +80,7 @@ const ChallengeScreen = () => {
     if (currentIndex === challenge.promptIndex) return;
 
     setRefreshing(true);
-    await updateChallenge({
-      promptIndex: currentIndex,
-      isRevealed: false,
-      secondsLeft: challengeDuration,
-      isFinished: false,
-      isCompleted: false,
-    });
+    await updateChallenge(new Challenge(currentIndex));
     setRefreshing(false);
   };
 
@@ -94,13 +93,7 @@ const ChallengeScreen = () => {
 
         // If there is no challenge or the challenge is outdated, start a new one
         if (!storedChallenge || storedChallenge.promptIndex !== currentIndex) {
-          await updateChallenge({
-            promptIndex: currentIndex,
-            isRevealed: false,
-            secondsLeft: challengeDuration,
-            isFinished: false,
-            isCompleted: false,
-          });
+          await updateChallenge(new Challenge(currentIndex));
           return;
         }
         setChallenge(storedChallenge);
@@ -150,7 +143,6 @@ const ChallengeScreen = () => {
                   {...{
                     challenge,
                     updateChallenge,
-                    duration: challengeDuration,
                     isCompleting,
                   }}
                 />

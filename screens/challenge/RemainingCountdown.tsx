@@ -6,7 +6,6 @@ import type { Challenge } from "./screen";
 type RemainingCountdownProps = {
   challenge: Challenge;
   updateChallenge: (challenge: Challenge) => void;
-  duration: number;
   isCompleting: boolean;
 };
 
@@ -19,7 +18,6 @@ const formatTime = (seconds: number) => {
 const RemainingCountdown = ({
   challenge,
   updateChallenge,
-  duration: challengeDuration,
   isCompleting,
 }: RemainingCountdownProps) => {
   const { colors } = useTheme();
@@ -27,7 +25,7 @@ const RemainingCountdown = ({
   return (
     <CountdownCircleTimer
       isPlaying={!challenge.isFinished && !isCompleting}
-      duration={challengeDuration}
+      duration={challenge.duration}
       initialRemainingTime={challenge.secondsLeft}
       colors={
         challenge.isFinished
