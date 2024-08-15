@@ -21,7 +21,40 @@ const CameraButton = ({
   setIsCompleting,
 }: CameraButtonProps) => {
   const [camPerm, requestCamPerm] = ImagePicker.useCameraPermissions();
+  const [imageURI, setImageURI] = useState<string | null>(null);
   const [sound, setSound] = useState<Sound>();
+
+  const handlePressed = async () => {
+    setIsCompleting(true);
+
+    try {
+      if (!camPerm?.granted) {
+        requestCamPerm();
+        return;
+      }
+      const result = await ImagePicker.launchCameraAsync();
+
+      console.log(result);
+      if (!result.canceled) {
+        await saveImage(result.assets[0].uri);
+        updateChallenge({ ...challenge, isCompleted: true, isFinished: true });
+        playSound();
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsCompleting(false);
+    }
+  };
+
+  const saveImage = async (imageURI: string) => {
+    try {
+      setImageURI(imageURI);
+    } catch (e) {
+      throw e;
+    }
+  };
 
   const playSound = async () => {
     const { sound } = await Audio.Sound.createAsync(
@@ -38,25 +71,6 @@ const CameraButton = ({
         }
       : undefined;
   }, [sound]);
-
-  const handlePressed = async () => {
-    setIsCompleting(true);
-
-    if (!camPerm?.granted) {
-      requestCamPerm();
-      setIsCompleting(false);
-      return;
-    }
-    const result = await ImagePicker.launchCameraAsync();
-
-    console.log(result);
-    if (!result.canceled) {
-      updateChallenge({ ...challenge, isCompleted: true, isFinished: true });
-      playSound();
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    }
-    setIsCompleting(false);
-  };
 
   return (
     <Button

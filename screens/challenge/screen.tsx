@@ -6,6 +6,7 @@ import {
   View,
   ScrollView,
   RefreshControl,
+  Image,
 } from "react-native";
 import { Text, ActivityIndicator } from "react-native-paper";
 import Animated, {
@@ -28,7 +29,7 @@ export type Challenge = {
 };
 
 const ChallengeScreen = () => {
-  const challengeDuration = 15;
+  const challengeDuration = 300; //in seconds
   const [challenge, setChallenge] = useState<Challenge>({
     promptIndex: 0,
     isRevealed: false,
@@ -87,25 +88,27 @@ const ChallengeScreen = () => {
   // On mount, load the challenge from storage
   useEffect(() => {
     (async () => {
-      const currentIndex = computePromptIndex();
-      const storedChallenge = await getChallenge();
+      try {
+        const currentIndex = computePromptIndex();
+        const storedChallenge = await getChallenge();
 
-      // If there is no challenge or the challenge is outdated, start a new one
-      if (!storedChallenge || storedChallenge.promptIndex !== currentIndex) {
-        await updateChallenge({
-          promptIndex: currentIndex,
-          isRevealed: false,
-          secondsLeft: challengeDuration,
-          isFinished: false,
-          isCompleted: false,
-        });
+        // If there is no challenge or the challenge is outdated, start a new one
+        if (!storedChallenge || storedChallenge.promptIndex !== currentIndex) {
+          await updateChallenge({
+            promptIndex: currentIndex,
+            isRevealed: false,
+            secondsLeft: challengeDuration,
+            isFinished: false,
+            isCompleted: false,
+          });
+          return;
+        }
+        setChallenge(storedChallenge);
+      } catch (e) {
+        console.error(e);
+      } finally {
         setIsLoading(false);
-        return;
       }
-
-      // If the challenge is still valid, loads it
-      setChallenge(storedChallenge);
-      setIsLoading(false);
     })();
   }, []);
 
