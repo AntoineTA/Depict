@@ -1,18 +1,17 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 
-import type { SubmissionScreenProps } from "@/types/types";
+import type { SubmissionScreenProps } from "@/navigators/types";
 
-const SubmissionScreen = ({ route, navigation }: SubmissionScreenProps) => {
+const SubmissionScreen = ({ route }: SubmissionScreenProps) => {
   const submission = route.params;
 
   return (
     <View style={styles.container}>
-      {/* <Text>{submission.prompt}</Text> */}
       <Animated.Image
         source={{ uri: submission.imageURI }}
-        // sharedTransitionTag="tag"
-        style={{ width: 300, height: 300 }}
+        style={styles.image}
+        sharedTransitionTag={`submission-${submission.date}`}
       />
     </View>
   );
@@ -23,6 +22,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+  },
+  image: {
+    alignSelf: "center",
+    objectFit: "contain",
+    width: "100%",
+    height: "100%",
   },
 });

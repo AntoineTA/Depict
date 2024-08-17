@@ -1,6 +1,7 @@
 import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
+
 import type { Challenge } from "./screen";
 
 type RemainingCountdownProps = {

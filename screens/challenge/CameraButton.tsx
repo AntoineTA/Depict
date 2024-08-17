@@ -6,11 +6,11 @@ import * as FileSystem from "expo-file-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Haptics from "expo-haptics";
 
+import loadSubmissionsAsync from "@/utils/submissionManager";
 import { prompts } from "@/constants/prompts";
 
 import type { Sound } from "expo-av/build/Audio";
 import type { Challenge } from "./screen";
-import loadSubmissionsAsync from "@/utils/submissionManager";
 
 type CameraButtonProps = {
   challenge: Challenge;

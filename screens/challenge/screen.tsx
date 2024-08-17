@@ -6,7 +6,7 @@ import {
   View,
   ScrollView,
   RefreshControl,
-  Image,
+  Text as NativeText,
 } from "react-native";
 import { Text, ActivityIndicator } from "react-native-paper";
 import Animated, {
@@ -47,14 +47,12 @@ const ChallengeScreen = () => {
   const [isCompleting, setIsCompleting] = useState(false); //track if the user is completing the challenge
 
   const computePromptIndex = () => {
-    return Math.floor(Math.random() * prompts.length);
-
-    // const startDate = new Date("2024-08-13");
-    // const today = new Date();
-    // const daysSinceStart = Math.floor(
-    //   (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
-    // );
-    // return daysSinceStart % prompts.length;
+    const startDate = new Date("2024-08-12");
+    const today = new Date();
+    const daysSinceStart = Math.floor(
+      (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+    );
+    return daysSinceStart % prompts.length;
   };
 
   const updateChallenge = async (updatedChallenge: Challenge) => {
@@ -122,6 +120,7 @@ const ChallengeScreen = () => {
 
       <View style={styles.main}>
         {isLoading && <ActivityIndicator style={styles.main} size="large" />}
+
         {!isLoading && challenge.isRevealed && (
           <>
             <Animated.View entering={BounceInLeft.duration(animDuration)}>
@@ -131,6 +130,8 @@ const ChallengeScreen = () => {
                   fontFamily: "Merriweather_900Black",
                   textTransform: "capitalize",
                 }}
+                adjustsFontSizeToFit
+                numberOfLines={1}
               >
                 {prompts[challenge.promptIndex]}
               </Text>
@@ -168,6 +169,7 @@ const ChallengeScreen = () => {
             <RevealButton {...{ challenge, updateChallenge }} />
           </Animated.View>
         )}
+
         {!isLoading && challenge.isFinished && !challenge.isCompleted && (
           <View style={styles.bottomText}>
             <Text variant="titleMedium">You ran out of time!</Text>
@@ -176,11 +178,12 @@ const ChallengeScreen = () => {
             </Text>
           </View>
         )}
+
         {!isLoading && challenge.isFinished && challenge.isCompleted && (
           <View style={styles.bottomText}>
             <Text variant="titleMedium">Well done!</Text>
             <Text variant="bodyLarge">
-              Your picture has been saved to the gallery.
+              Come back tomorrow for a new challenge.
             </Text>
           </View>
         )}
@@ -198,27 +201,23 @@ const styles = StyleSheet.create({
   headline: {
     marginTop: Dimensions.get("window").height * 0.1,
     alignItems: "center",
-    // backgroundColor: "lightgreen",
   },
   main: {
     height: Dimensions.get("window").height * 0.4,
     alignItems: "center",
     justifyContent: "space-around",
-    // backgroundColor: "lightgrey",
   },
   actions: {
     marginTop: 30,
     height: "75%",
     justifyContent: "space-around",
     alignItems: "center",
-    // backgroundColor: "violet",
   },
   bottom: {
     height: Dimensions.get("window").height * 0.1,
     width: "80%",
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: "lightblue",
     alignSelf: "center",
   },
   bottomText: {

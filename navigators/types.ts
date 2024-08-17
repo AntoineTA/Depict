@@ -1,22 +1,22 @@
 import type { Submission } from "@/utils/submissionManager";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-export type BottomTabParamList = {
+export type RootNavigatorParamList = {
   ChallengeScreen: undefined;
-  GalleryTabStack: undefined;
+  GalleryNavigator: undefined;
 };
 
-export type GalleryTabStackParamList = {
+export type GalleryNavigatorParamList = {
   Gallery: undefined;
   Submission: Submission;
 };
 
 export type GalleryScreenProps = NativeStackScreenProps<
-  GalleryTabStackParamList,
+  GalleryNavigatorParamList,
   "Gallery"
 >;
 
 export type SubmissionScreenProps = NativeStackScreenProps<
-  GalleryTabStackParamList,
+  GalleryNavigatorParamList,
   "Submission"
 >;

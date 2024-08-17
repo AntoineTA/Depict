@@ -2,12 +2,12 @@ import { createMaterialBottomTabNavigator } from "react-native-paper/react-navig
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import ChallengeScreen from "@/screens/challenge/screen";
-import GalleryTabStack from "./GalleryTabStack";
+import GalleryNavigator from "../gallery/navigator";
 
-import type { BottomTabParamList } from "@/types/types";
+import type { RootNavigatorParamList } from "@/navigators/types";
 
-const BottomTab = () => {
-  const Tab = createMaterialBottomTabNavigator<BottomTabParamList>();
+const RootNavigator = () => {
+  const Tab = createMaterialBottomTabNavigator<RootNavigatorParamList>();
 
   return (
     <Tab.Navigator>
@@ -29,8 +29,8 @@ const BottomTab = () => {
         }}
       />
       <Tab.Screen
-        name="GalleryTabStack"
-        component={GalleryTabStack}
+        name="GalleryNavigator"
+        component={GalleryNavigator}
         options={{
           title: "Gallery",
           tabBarIcon: ({ focused, color }) =>
@@ -52,4 +52,4 @@ const BottomTab = () => {
     </Tab.Navigator>
   );
 };
-export default BottomTab;
+export default RootNavigator;

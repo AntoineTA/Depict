@@ -3,13 +3,13 @@ import { useTheme } from "react-native-paper";
 
 import GalleryScreen from "@/screens/gallery/screen";
 import SubmissionScreen from "@/screens/submission/screen";
-import AppBar from "@/components/AppBar";
+import AppBar from "./AppBar";
 
-import type { GalleryTabStackParamList } from "@/types/types";
+import type { GalleryNavigatorParamList } from "@/navigators/types";
 
-const GalleryTabStack = () => {
+const GalleryNavigator = () => {
   const { colors } = useTheme();
-  const Stack = createNativeStackNavigator<GalleryTabStackParamList>();
+  const Stack = createNativeStackNavigator<GalleryNavigatorParamList>();
 
   return (
     <Stack.Navigator
@@ -28,4 +28,4 @@ const GalleryTabStack = () => {
     </Stack.Navigator>
   );
 };
-export default GalleryTabStack;
+export default GalleryNavigator;

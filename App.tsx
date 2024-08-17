@@ -8,7 +8,7 @@ import {
 } from "@expo-google-fonts/merriweather";
 import * as SplashScreen from "expo-splash-screen";
 
-import BottomTab from "./navigators/BottomTab";
+import RootNavigator from "./navigators/root/navigator";
 import { useEffect } from "react";
 
 export default function App() {
@@ -31,7 +31,7 @@ export default function App() {
       <PaperProvider>
         <StatusBar style="auto" />
         <NavigationContainer>
-          <BottomTab />
+          <RootNavigator />
         </NavigationContainer>
       </PaperProvider>
     </SafeAreaView>

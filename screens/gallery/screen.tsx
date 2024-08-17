@@ -1,27 +1,21 @@
 import { useState, useCallback } from "react";
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  FlatList,
-  Image,
-  Pressable,
-} from "react-native";
-import { Text, useTheme, Button } from "react-native-paper";
-import Animated from "react-native-reanimated";
+import { useFocusEffect } from "@react-navigation/native";
+import { StyleSheet, View, FlatList } from "react-native";
+import { ActivityIndicator, Text } from "react-native-paper";
 
 import { loadSubmissionsAsync, Submission } from "@/utils/submissionManager";
-import type { GalleryScreenProps } from "@/types/types";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
+import Thumbnail from "./Thumbnail";
+
+import type { GalleryScreenProps } from "@/navigators/types";
 
 const GalleryScreen = ({ navigation }: GalleryScreenProps) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
-  const { colors } = useTheme();
 
   // On component focus
   useFocusEffect(
     useCallback(() => {
+      setIsLoading(true);
       (async () => {
         try {
           //load submissions
@@ -36,51 +30,47 @@ const GalleryScreen = ({ navigation }: GalleryScreenProps) => {
           console.error(e);
         }
       })();
+      setIsLoading(false);
     }, []),
   );
+
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  if (!isLoading && submissions.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text variant="titleMedium">No submissions yet!</Text>
+        <Text variant="bodyMedium" style={{ alignSelf: "center" }}>
+          Go to the Challenge tab to get started.
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <FlatList
         data={submissions}
-        renderItem={({ item: submission }) => (
-          <Animated.View
-            style={styles.thumbnail}
-            sharedTransitionTag="submissionImage"
-          >
-            <Pressable
-              onPress={() => navigation.navigate("Submission", submission)}
-            >
-              <Image
-                source={{ uri: submission.imageURI }}
-                style={styles.image}
-              />
-              <Text
-                style={[
-                  styles.prompt,
-                  {
-                    backgroundColor: colors.background,
-                    color: colors.onBackground,
-                  },
-                ]}
-                variant="labelLarge"
-              >
-                {submission.prompt}
-              </Text>
-            </Pressable>
-          </Animated.View>
-        )}
         numColumns={2}
+        renderItem={({ item: submission }) => (
+          <Thumbnail
+            submission={submission}
+            onPress={() => navigation.navigate("Submission", submission)}
+          />
+        )}
+        style={{ width: "100%" }}
+        contentContainerStyle={
+          submissions.length > 1
+            ? { alignItems: "center" }
+            : { alignItems: "flex-start" }
+        }
       />
-
-      {/* DEV */}
-      <Button
-        mode="contained"
-        onPress={() => AsyncStorage.clear()}
-        style={{ margin: 10 }}
-      >
-        Clear storage
-      </Button>
     </View>
   );
 };
@@ -88,29 +78,11 @@ export default GalleryScreen;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
     flex: 1,
+    width: "100%",
     alignSelf: "center",
     alignItems: "center",
-    justifyContent: "flex-start",
-  },
-  thumbnail: {
-    width: Dimensions.get("window").width * 0.45,
-    height: Dimensions.get("window").width * 0.45,
-    margin: 5,
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    borderRadius: 10,
-  },
-  prompt: {
-    position: "absolute",
-    bottom: 0,
-    margin: 5,
-    padding: 3,
-    borderRadius: 5,
-    textTransform: "capitalize",
+    justifyContent: "center",
+    paddingHorizontal: 5,
   },
 });

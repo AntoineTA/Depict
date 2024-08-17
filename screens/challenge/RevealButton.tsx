@@ -1,6 +1,5 @@
 import { Dimensions } from "react-native";
 import * as Haptics from "expo-haptics";
-
 import { useTheme } from "react-native-paper";
 import { SwipeButton } from "@arelstone/react-native-swipe-button";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
