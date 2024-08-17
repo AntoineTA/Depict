@@ -64,7 +64,7 @@ const CameraButton = ({
       // create a submission object and save it to AsyncStorage
       const submission = {
         imageURI: outputURI,
-        date: challenge.date,
+        date: challenge.date.valueOf(),
         promptIndex: challenge.promptIndex,
         prompt: prompts[challenge.promptIndex],
         timeTaken: challenge.duration - challenge.secondsLeft,

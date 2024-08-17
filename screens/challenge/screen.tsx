@@ -47,12 +47,14 @@ const ChallengeScreen = () => {
   const [isCompleting, setIsCompleting] = useState(false); //track if the user is completing the challenge
 
   const computePromptIndex = () => {
-    const startDate = new Date("2024-08-13");
-    const today = new Date();
-    const daysSinceStart = Math.floor(
-      (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
-    );
-    return daysSinceStart % prompts.length;
+    return Math.floor(Math.random() * prompts.length);
+
+    // const startDate = new Date("2024-08-13");
+    // const today = new Date();
+    // const daysSinceStart = Math.floor(
+    //   (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+    // );
+    // return daysSinceStart % prompts.length;
   };
 
   const updateChallenge = async (updatedChallenge: Challenge) => {
